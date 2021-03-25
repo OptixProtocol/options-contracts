@@ -21,7 +21,7 @@ pragma solidity 0.6.12;
  */
  
 import "@openzeppelin/contracts/presets/ERC1155PresetMinterPauser.sol";
-// import "github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/presets/ERC1155PresetMinterPauser.sol";
+// import "github.com/OpenZeppelin/openzeppelin-contracts/blob/solc-0.6/contracts/presets/ERC1155PresetMinterPauser.sol";
 
 
 contract WriterPool is ERC1155PresetMinterPauser  {

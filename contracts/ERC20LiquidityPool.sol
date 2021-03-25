@@ -22,15 +22,12 @@ pragma solidity 0.6.12;
  */
 
 
-import "@openzeppelin/contracts/presets/ERC1155PresetMinterPauser.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+
 import "./interfaces/Interfaces.sol";
 import "./ERC1155Pool.sol";
 
-// import "github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/presets/ERC1155PresetMinterPauser.sol";
-// import "github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.3.0/contracts/token/ERC20/ERC20.sol";
-// import "Interfaces.sol";
-// import "./ERC1155Pool.sol";
+import "@openzeppelin/contracts/presets/ERC1155PresetMinterPauser.sol";
+// import "github.com/OpenZeppelin/openzeppelin-contracts/blob/solc-0.6/contracts/presets/ERC1155PresetMinterPauser.sol";
 
 
 //16.66 KB with only ERC1155PresetMinterPauser
