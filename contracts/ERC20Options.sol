@@ -29,7 +29,7 @@ import "./ERC20LiquidityPool.sol";
 /** 
  * @title Optyn
  */
-contract ERC20Options is Ownable, IOptions, IFeeCalcs, ERC721 {
+contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -47,6 +47,9 @@ contract ERC20Options is Ownable, IOptions, IFeeCalcs, ERC721 {
 
     uint public protocolFee = 100;  //1%
 
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant CONTRACT_CALLER_ROLE = keccak256("CONTRACT_CALLER_ROLE");
+
     /**
      */
     constructor(
@@ -58,6 +61,8 @@ contract ERC20Options is Ownable, IOptions, IFeeCalcs, ERC721 {
         lpPools = _lpPools;
         protocolFeeRecipient = _protocolFeeRecipient;
         feeCalcs = this;
+        _setupRole(ADMIN_ROLE, _msgSender());
+        _setupRole(CONTRACT_CALLER_ROLE, _msgSender());        
     }
 
 
@@ -66,42 +71,49 @@ contract ERC20Options is Ownable, IOptions, IFeeCalcs, ERC721 {
      * @notice Used for changing protocolFeeRecipient
      * @param recipient New protocolFeeRecipient recipient address
      */
-    function setProtocolFeeRecipient(address recipient) external onlyOwner {
+    function setProtocolFeeRecipient(address recipient) external  {
         require(address(recipient) != address(0));
+        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         protocolFeeRecipient = recipient;
     }
 
-    function setIFeeCalcs(IFeeCalcs _feeCalcs) external onlyOwner {
+    function setIFeeCalcs(IFeeCalcs _feeCalcs) external  {
+        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         feeCalcs = _feeCalcs;
     }
 
-    function setLPMinFee(uint _fee) external onlyOwner {
+    function setLPMinFee(uint _fee) external  {
         require(_fee >= 0, "Fee too low");
         require(_fee <= 5000, "Fee too high");
+        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         lpMinFee = _fee;
     }
 
-    function setLPMaxFee(uint _fee) external onlyOwner {
+    function setLPMaxFee(uint _fee) external  {
         require(_fee >= 0, "Fee too low");
         require(_fee <= 5000, "Fee too high");
+        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         lpMaxFee = _fee;
     }
 
-    function setBalMinFee(uint _fee) external onlyOwner {
+    function setBalMinFee(uint _fee) external  {
         require(_fee >= 0, "Fee too low");
         require(_fee <= 5000, "Fee too high");
+        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         balMinFee = _fee;
     }
 
-    function setBalMaxFee(uint _fee) external onlyOwner {
+    function setBalMaxFee(uint _fee) external  {
         require(_fee >= 0, "Fee too low");
         require(_fee <= 5000, "Fee too high");
+        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         balMaxFee = _fee;
     }
 
-    function setProtocolFee(uint _fee) external onlyOwner {
+    function setProtocolFee(uint _fee) external  {
         require(_fee >= 0, "Fee too low");
         require(_fee <= 5000, "Fee too high");
+        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         protocolFee = _fee;
     }
 

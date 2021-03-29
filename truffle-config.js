@@ -59,8 +59,26 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
+    moonbaseTestnet: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc.testnet.moonbeam.network`),
+      network_id: 1287
+    },
+    maticTestnet: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc-mumbai.matic.today`),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    fantomTestnet: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc.testnet.fantom.network`),
+      network_id: 0xfa2,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },     
   },
-  plugins: ["solidity-coverage"],
+  plugins: ["solidity-coverage","truffle-contract-size"],
   
   // Set default mocha options here, use special reporters etc.
   mocha: {slow: 10000},

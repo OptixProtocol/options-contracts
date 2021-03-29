@@ -102,7 +102,7 @@ module.exports = async function (deployer, network, [account]) {
         //    await lp.createMarket(AavePriceProvider.address,
         //         AAVE.address)  
         
-        await lp.transferOwnership(ERC20Options.address);
+        // await lp.transferOwnership(ERC20Options.address);
         // await lp.transferOwnership("0x6a17c567315ED3d9C378A5fd79726C2286595528");
         // await opt.transferOwnership("0x6a17c567315ED3d9C378A5fd79726C2286595528");
 
@@ -169,7 +169,45 @@ module.exports = async function (deployer, network, [account]) {
                     "ITM")
                 break;
                 await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
+                //set the owner of LP & opt to be opt
             }
+            case "moonbaseTestnet": {
+                const wp = await deployer.deploy(WriterPool, "url");
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const opt = await deployer.deploy(ERC20Options,
+                    "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
+                    ERC20LiquidityPool.address,
+                    "GameItem",
+                    "ITM")
+                break;
+                await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
+                //set the owner of LP & opt to be opt
+            }
+            case "maticTestnet": {
+                const wp = await deployer.deploy(WriterPool, "url");
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const opt = await deployer.deploy(ERC20Options,
+                    "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
+                    ERC20LiquidityPool.address,
+                    "GameItem",
+                    "ITM")
+                break;
+                await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
+                //set the owner of LP & opt to be opt
+            }
+            case "fantomTestnet": {
+                const wp = await deployer.deploy(WriterPool, "url");
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const opt = await deployer.deploy(ERC20Options,
+                    "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
+                    ERC20LiquidityPool.address,
+                    "GameItem",
+                    "ITM")
+                break;
+                await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
+                //set the owner of LP & opt to be opt
+            }
+                
             default: {
                 throw Error(`wrong network ${network}`)
             }        
