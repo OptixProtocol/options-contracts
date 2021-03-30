@@ -26,7 +26,7 @@ pragma solidity 0.6.12;
 import "./interfaces/Interfaces.sol";
 import "./ERC1155Pool.sol";
 
-import "@openzeppelin/contracts/presets/ERC1155PresetMinterPauser.sol";
+// import "@openzeppelin/contracts/presets/ERC1155PresetMinterPauser.sol";
 // import "github.com/OpenZeppelin/openzeppelin-contracts/blob/solc-0.6/contracts/presets/ERC1155PresetMinterPauser.sol";
 
 
@@ -64,15 +64,14 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
     mapping(uint256 => uint256) public collateralizationRatio;
     uint256 public optionMarketCount = 0;
 
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant MARKET_MAKER_ROLE = keccak256("MARKET_MAKER_ROLE");
     bytes32 public constant CONTRACT_CALLER_ROLE = keccak256("CONTRACT_CALLER_ROLE");
 
 
     constructor(WriterPool _writerPool) public {
         writerPool = _writerPool;
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(MARKET_MAKER_ROLE, _msgSender());
-        _setupRole(ADMIN_ROLE, _msgSender());
     }
 
    function createMarket(AggregatorV3Interface _priceProvider, ERC20 _token) public  {
@@ -100,12 +99,12 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
      * @param value New period value
      */
     function setLockupPeriod(IERC20 _token, uint256 value) external  {
-        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
         lockupPeriod[_token] = value;
     }
 
     function setMaxInvest(IERC20 _token, uint256 _maxInvest) public  {
-        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
         maxInvest[_token] = _maxInvest;
     }
 
@@ -116,7 +115,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
      */
     function setCollaterizationRatio(uint value, uint optionMarketId) external  {
         require(5000 <= value && value <= 10000, "wrong value");
-        require(hasRole(ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
         collateralizationRatio[optionMarketId] = value;
     }
 
@@ -131,7 +130,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
             lockedAmount[token].add(amount) <= totalBalance(token),
             "Pool Error: Amount is too large."
         );
-        require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
+        require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have contract caller role");
 
         lockedLiquidity.push(LockedLiquidity(amount, premium, true, token, optionType));
         if(optionType == IOptions.OptionType.Put)
@@ -150,7 +149,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
     function unlock(uint256 id) external override  {
         LockedLiquidity storage ll = lockedLiquidity[id];
         require(ll.locked, "LockedLiquidity with such id has already unlocked");
-        require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
+        require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have contract caller role");
 
         ll.locked = false;
 
@@ -178,7 +177,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
         LockedLiquidity storage ll = lockedLiquidity[id];
         require(ll.locked, "LockedLiquidity with such id has already unlocked");
         require(to != address(0));
-        require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
+        require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have contract caller role");
 
 
         ll.locked = false;
