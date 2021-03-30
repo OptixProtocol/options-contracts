@@ -33,7 +33,7 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
   async function createOption({period, amount, strike, user} = {}) {
     const {ERC20Options, BTCPriceProvider, } = await contracts
     const price =  await BTCPriceProvider.latestAnswer()
-    const [_period, _amount, _strike, from] = [
+    const [_period, _optionSize, _strike, from] = [
       toBN(24 * 3600 * (period || 1)),
       toBN(amount || toBTC(0.001)),
       toBN(strike || price),
@@ -41,26 +41,28 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
     ]
     const _type = OptionType.Call
     // console.log("_period",_period);
-    // console.log("_amount",_amount);
+    // console.log("_optionSize",_optionSize);
     // console.log("_strike", _strike.toString());
     // console.log("price",price.toString());
     // console.log("_type",_type);
-    const [value, protocolFee] = await ERC20Options.premium(
+    const wtf = await ERC20Options.premium(
       _period,
-      _amount,
+      _optionSize,
       _strike,
       _type,
       marketId
     ).then((x) => [x.totalETH, x.protocolFee])
-    // console.log("_period:" +_period);
-    // console.log("_amount:" +_amount);
-    // console.log("_strike:" +_strike);
-    // console.log("_type:" + _type);
+    console.log("_period:" +_period);
+    console.log("_optionSize:" +_optionSize);
+    console.log("_strike:" +_strike);
+    console.log("_type:" + _type);
+    console.log("marketId:" + marketId);
     // console.log("value:" + value);
-    // console.log("from:" + from);
+    console.log("from:" + from);
 
+    console.log("wtf:", wtf);
  
-    const createEvent = await ERC20Options.create3(_period, _amount, _strike, _type, marketId, {
+    const createEvent = await ERC20Options.create3(_period, _optionSize, _strike, _type, marketId, {
               // value,
               from,
         })
@@ -189,25 +191,25 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
   });
 
   describe('Test option & pool', () => {
-    it("Should be owned by the first account", async () => {
-      const { ERC20Options } = await contracts
-      assert.equal(
-        await ERC20Options.owner.call(),
-        user1,
-        "The first account isn't the contract owner"
-      )
-    })
+    // it("Should be owned by the first account", async () => {
+    //   const { ERC20Options } = await contracts
+    //   assert.equal(
+    //     await ERC20Options.owner.call(),
+    //     user1,
+    //     "The first account isn't the contract owner"
+    //   )
+    // })
 
-    it("Should be the owner of the pool contract", async () => {
-      const { ERC20Options, ERC20LiquidityPool } = await contracts
-      // console.log("ERC20LiquidityPool.owner", await ERC20LiquidityPool.owner());
-      // console.log("ERC20Options.address", ERC20Options.address);
-      assert.equal(
-        await ERC20LiquidityPool.owner(),
-        ERC20Options.address,
-        "Isn't the owner of the pool"
-      )
-    })
+    // it("Should be the owner of the pool contract", async () => {
+    //   const { ERC20Options, ERC20LiquidityPool } = await contracts
+    //   // console.log("ERC20LiquidityPool.owner", await ERC20LiquidityPool.owner());
+    //   // console.log("ERC20Options.address", ERC20Options.address);
+    //   assert.equal(
+    //     await ERC20LiquidityPool.owner(),
+    //     ERC20Options.address,
+    //     "Isn't the owner of the pool"
+    //   )
+    // })
 
     it("Should provide funds to the pool", async () => {
       const { ERC20LiquidityPool, WBTC } = await contracts
@@ -275,7 +277,7 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
       await ERC20Options.exercise(id, { from: user2 }).then(
         () => assert.fail("Exercising a call option should be canceled"),
         (x) => {
-          assert.equal(x.reason, "Wrong msg.sender", "Wrong error reason")
+          assert.equal(x.reason, "Not sender or approved", "Wrong error reason")
         }
       )
     })
@@ -335,12 +337,12 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
         createOption({ period: 3, user: user2 }),
         createOption({ period: 3, user: user2, amount: toBTC(4) }),
       ]).then((x) => x.map((x) => x.id.toNumber()))
-
+      console.log("expected:",expected.toString())
       await timeTravel(3 * 24 * 3600 + 1)
 
       const actual = await ERC20Options.unlockAll(expected)
         .then((x) => x.logs.filter((x) => x.event == "Expire"))
-        .then((x) => x.map((x) => x.args.id.toNumber()))
+        .then((x) => x.map((x) => x.args.optionId.toNumber()))
 
       assert.deepEqual(expected, actual, "Wrong optionIDs has been initialized")
       for (const id of expected) {
@@ -366,7 +368,7 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
       )
     })
 
-    it("should unlock funds after an option is exercised", async () => {
+    it.only("should unlock funds after an option is exercised", async () => {
       const { ERC20Options, ERC20LiquidityPool, WBTC } = await contracts
       const amount = Math.random().toFixed(18)
       const strike = toBN(200e8)

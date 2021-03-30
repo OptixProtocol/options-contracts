@@ -283,7 +283,7 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     }
 
    function create2(
-        address account,
+        address payable account,
         uint256 period,
         uint256 optionSize,
         uint256 strike,
@@ -320,7 +320,7 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
      * @return optionID Created option's ID
      */
     function create4(
-        address account,
+        address payable account,
         uint256 period,
         uint256 optionSize,
         uint256 strike,
@@ -339,32 +339,33 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
         (Fees memory _premium) = premium(period, optionSize, strike, optionType, optionMarketId);
         
         optionID = options.length;        
-        Option memory option = _createOption(period,optionSize,strike,optionType,optionMarketId,_premium);
+        Option memory option = _createOption(account,period,optionSize,strike,optionType,optionMarketId,_premium);
 
 
-        lpPools.collatoralToken(optionMarketId).transferFrom(msg.sender, address(lpPools), _premium.total-_premium.protocolFee);
-        lpPools.collatoralToken(optionMarketId).transferFrom(msg.sender, address(protocolFeeRecipient), _premium.protocolFee);
+        lpPools.collatoralToken(optionMarketId).transferFrom(account, address(lpPools), _premium.total-_premium.protocolFee);
+        lpPools.collatoralToken(optionMarketId).transferFrom(account, address(protocolFeeRecipient), _premium.protocolFee);
 
         options.push(option);
         lpPools.lock(optionID, option.lockedAmount, option.premium, lpPools.collatoralToken(optionMarketId), optionType);
-        _safeMint(msg.sender, optionID);
+        _safeMint(account, optionID);
         emit Create(optionID, account, optionMarketId, _premium.protocolFee, _premium.total);
     }
 
-    function _createOption(uint256 period,
+    function _createOption(address payable account, 
+        uint256 period,
         uint256 optionSize,
         uint256 strike,
         OptionType optionType,
         uint256 optionMarketId, Fees memory _premium) internal view returns (Option memory option){
 
-        uint256 strikeAmount = optionSize.sub(_premium.strikeFee);
+        uint256 strikeAmount = optionSize;
         // uint optPremium = (_premium.total.sub(_premium.protocolFee));
         option = Option(
            State.Active,
-            msg.sender,
+            account,
             strike,
             optionSize,
-            (strikeAmount.mul(lpPools.collateralizationRatio(optionMarketId)).div(10000).add(_premium.strikeFee)).mul(1e9),
+            (strikeAmount.mul(lpPools.collateralizationRatio(optionMarketId)).div(10000).add(_premium.strikeFee)),
             _premium.total,
             block.timestamp + period,
             optionType,

@@ -79,6 +79,7 @@ module.exports = async function (deployer, network, [account]) {
             "GameItem",
             "ITM"
         )
+        await lp.grantRole(await lp.CONTRACT_CALLER_ROLE(), opt.address);
 
         // await h.mintTo(BC.address, "753001000000000000000000000")
         await lp.createMarket(BTCPriceProvider.address,
@@ -167,8 +168,10 @@ module.exports = async function (deployer, network, [account]) {
                     ERC20LiquidityPool.address,
                     "GameItem",
                     "ITM")
+                // await lp.grantRole(await lp.CONTRACT_CALLER_ROLE(), ERC20Options.address);
+                // await wp.grantRole(await wp.MINTER_ROLE(), ERC20LiquidityPool.address);
                 break;
-                await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
+
                 //set the owner of LP & opt to be opt
             }
             case "moonbaseTestnet": {
