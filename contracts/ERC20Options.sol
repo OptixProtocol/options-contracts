@@ -365,7 +365,7 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
             account,
             strike,
             optionSize,
-            (strikeAmount.mul(lpPools.collateralizationRatio(optionMarketId)).div(10000).add(_premium.strikeFee)),
+            (strikeAmount.mul(lpPools.collateralizationRatio(optionMarketId)).div(10000).add(_premium.strikeFee)).mul(1e9),
             _premium.total,
             block.timestamp + period,
             optionType,
