@@ -52,15 +52,15 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
       _type,
       marketId
     ).then((x) => [x.totalETH, x.protocolFee])
-    console.log("_period:" +_period);
-    console.log("_optionSize:" +_optionSize);
-    console.log("_strike:" +_strike);
-    console.log("_type:" + _type);
-    console.log("marketId:" + marketId);
-    // console.log("value:" + value);
-    console.log("from:" + from);
+    // console.log("_period:" +_period);
+    // console.log("_optionSize:" +_optionSize);
+    // console.log("_strike:" +_strike);
+    // console.log("_type:" + _type);
+    // console.log("marketId:" + marketId);
+    // // console.log("value:" + value);
+    // console.log("from:" + from);
 
-    console.log("wtf:", wtf);
+    // console.log("wtf:", wtf);
  
     const createEvent = await ERC20Options.create3(_period, _optionSize, _strike, _type, marketId, {
               // value,
@@ -368,7 +368,7 @@ module.exports.test = () => contract("ERC20Options WBTC(call)", ([user1, user2, 
       )
     })
 
-    it.only("should unlock funds after an option is exercised", async () => {
+    it("should unlock funds after an option is exercised", async () => {
       const { ERC20Options, ERC20LiquidityPool, WBTC } = await contracts
       const amount = Math.random().toFixed(18)
       const strike = toBN(200e8)

@@ -231,10 +231,10 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     {
         uint256 feeProportion;
         if (optionType == IOptions.OptionType.Put){
-             feeProportion = lpPools.putRatio(lpPools.collatoralToken(optionMarketId)).mul(lpPools.proportionLocked(lpPools.collatoralToken(optionMarketId), optionSize)).div(1e9);
+             feeProportion = lpPools.putRatio(lpPools.collatoralToken(optionMarketId),optionSize.mul(1e9)).mul(lpPools.proportionLocked(lpPools.collatoralToken(optionMarketId), optionSize)).div(1e9);
         }
         else{
-             feeProportion = lpPools.callRatio(lpPools.collatoralToken(optionMarketId)).mul(lpPools.proportionLocked(lpPools.collatoralToken(optionMarketId), optionSize)).div(1e9);
+             feeProportion = lpPools.callRatio(lpPools.collatoralToken(optionMarketId),optionSize.mul(1e9)).mul(lpPools.proportionLocked(lpPools.collatoralToken(optionMarketId), optionSize)).div(1e9);
         }
 
         if(feeProportion.mul(balMaxFee).div(1e9)>balMinFee)
@@ -365,7 +365,7 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
             account,
             strike,
             optionSize,
-            (strikeAmount.mul(lpPools.collateralizationRatio(optionMarketId)).div(10000).add(_premium.strikeFee)).mul(1e9),
+            (strikeAmount.mul(lpPools.collateralizationRatio(optionMarketId)).div(10000).add(_premium.strikeFee.div(1e9))).mul(1e9),
             _premium.total,
             block.timestamp + period,
             optionType,
@@ -481,7 +481,7 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
         if (option.optionType == OptionType.Call) {
             require(option.strike <= currentPrice, "Current price is too low");
             profit = currentPrice.sub(option.strike).mul(option.optionSize).div(currentPrice);
-        } else {
+        } else if (option.optionType == OptionType.Put) {
             require(option.strike >= currentPrice, "Current price is too high");
             profit = option.strike.sub(currentPrice).mul(option.optionSize).div(currentPrice);
         }
