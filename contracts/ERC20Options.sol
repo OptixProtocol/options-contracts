@@ -82,36 +82,36 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     }
 
     function setLPMinFee(uint _fee) external  {
-        require(_fee >= 0, "Fee too low");
-        require(_fee <= 5000, "Fee too high");
+        require(_fee >= 0, "ERC20Options: Fee too low");
+        require(_fee <= 5000, "ERC20Options: Fee too high");
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         lpMinFee = _fee;
     }
 
     function setLPMaxFee(uint _fee) external  {
-        require(_fee >= 0, "Fee too low");
-        require(_fee <= 5000, "Fee too high");
+        require(_fee >= 0, "ERC20Options: Fee too low");
+        require(_fee <= 5000, "ERC20Options: Fee too high");
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         lpMaxFee = _fee;
     }
 
     function setBalMinFee(uint _fee) external  {
-        require(_fee >= 0, "Fee too low");
-        require(_fee <= 5000, "Fee too high");
+        require(_fee >= 0, "ERC20Options: Fee too low");
+        require(_fee <= 5000, "ERC20Options: Fee too high");
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         balMinFee = _fee;
     }
 
     function setBalMaxFee(uint _fee) external  {
-        require(_fee >= 0, "Fee too low");
-        require(_fee <= 5000, "Fee too high");
+        require(_fee >= 0, "ERC20Options: Fee too low");
+        require(_fee <= 5000, "ERC20Options: Fee too high");
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         balMaxFee = _fee;
     }
 
     function setProtocolFee(uint _fee) external  {
-        require(_fee >= 0, "Fee too low");
-        require(_fee <= 5000, "Fee too high");
+        require(_fee >= 0, "ERC20Options: Fee too low");
+        require(_fee <= 5000, "ERC20Options: Fee too high");
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20Options: must have admin role");
         protocolFee = _fee;
     }
@@ -332,10 +332,10 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     {
         require(
             optionType == OptionType.Call || optionType == OptionType.Put,
-            "Wrong option type"
+            "ERC20Options: Wrong option type"
         );
-        require(period >= 1 days, "Period is too short");
-        require(period <= 4 weeks, "Period is too long");
+        require(period >= 1 days, "ERC20Options: Period is too short");
+        require(period <= 4 weeks, "ERC20Options: Period is too long");
         (Fees memory _premium) = premium(period, optionSize, strike, optionType, optionMarketId);
         
         optionID = options.length;        
@@ -381,10 +381,10 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     function transfer(uint256 optionID, address payable newHolder) external {
         Option storage option = options[optionID];
 
-        require(newHolder != address(0), "new holder address is zero");
-        require(option.expiration >= block.timestamp, "Option has expired");
-        require(option.holder == msg.sender, "Wrong msg.sender");
-        require(option.state == State.Active, "Only active option could be transferred");
+        require(newHolder != address(0), "ERC20Options: New holder address is zero");
+        require(option.expiration >= block.timestamp, "ERC20Options: Option has expired");
+        require(option.holder == msg.sender, "ERC20Options: Wrong msg.sender");
+        require(option.state == State.Active, "ERC20Options: Only active option could be transferred");
 
         option.holder = newHolder;
     }
@@ -396,9 +396,9 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     function exercise(uint256 optionID) external {
         Option storage option = options[optionID];
 
-        require(option.expiration >= block.timestamp, "Option has expired");
-        require((option.holder == msg.sender)||isApprovedForAll(option.holder,msg.sender), "Not sender or approved");
-        require(option.state == State.Active, "Wrong state");
+        require(option.expiration >= block.timestamp, "ERC20Options: Option has expired");
+        require((option.holder == msg.sender)||isApprovedForAll(option.holder,msg.sender), "ERC20Options: Not sender or approved");
+        require(option.state == State.Active, "ERC20Options: Wrong state");
 
         option.state = State.Exercised;
         uint256 profit = payProfit(optionID);
@@ -438,8 +438,8 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
      */
     function unlock(uint256 optionID) public {
         Option storage option = options[optionID];
-        require(option.expiration < block.timestamp, "Option has not expired yet");
-        require(option.state == State.Active, "Option is not active");
+        require(option.expiration < block.timestamp, "ERC20Options: Option has not expired yet");
+        require(option.state == State.Active, "ERC20Options: Option is not active");
         option.state = State.Expired;
         lpPools.unlock(optionID);
         emit Expire(optionID, option.marketId, option.premium);
@@ -479,10 +479,10 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
         (, int _latestPrice, , , ) = lpPools.priceProvider(option.marketId).latestRoundData();
         uint256 currentPrice = uint256(_latestPrice);
         if (option.optionType == OptionType.Call) {
-            require(option.strike <= currentPrice, "Current price is too low");
+            require(option.strike <= currentPrice, "ERC20Options: Current price is too low");
             profit = currentPrice.sub(option.strike).mul(option.optionSize).div(currentPrice);
         } else if (option.optionType == OptionType.Put) {
-            require(option.strike >= currentPrice, "Current price is too high");
+            require(option.strike >= currentPrice, "ERC20Options: Current price is too high");
             profit = option.strike.sub(currentPrice).mul(option.optionSize).div(currentPrice);
         }
         if (profit > option.lockedAmount)

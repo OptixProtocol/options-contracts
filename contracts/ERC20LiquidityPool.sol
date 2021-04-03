@@ -114,7 +114,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
      * @param value New optionCollateralizationRatio value
      */
     function setCollaterizationRatio(uint value, uint optionMarketId) external  {
-        require(5000 <= value && value <= 10000, "wrong value");
+        require(5000 <= value, "ERC20LiquidityPool: too low");
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
         collateralizationRatio[optionMarketId] = value;
     }
@@ -125,10 +125,10 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
      * @param amount Amount of funds that should be locked in an option
      */
     function lock(uint id, uint256 amount, uint256 premium, IERC20 token, IOptions.OptionType optionType) external  {
-       require(id == lockedLiquidity.length, "Wrong id");
+       require(id == lockedLiquidity.length, "ERC20LiquidityPool: Wrong id");
        require(
             lockedAmount[token].add(amount) <= totalBalance(token),
-            "Pool Error: Amount is too large."
+            "ERC20LiquidityPool: Amount is too large."
         );
         require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have contract caller role");
 
@@ -148,7 +148,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
      */
     function unlock(uint256 id) external override  {
         LockedLiquidity storage ll = lockedLiquidity[id];
-        require(ll.locked, "LockedLiquidity with such id has already unlocked");
+        require(ll.locked, "ERC20LiquidityPool: LockedLiquidity with id has already unlocked");
         require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have contract caller role");
 
         ll.locked = false;
@@ -175,7 +175,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
         
     {
         LockedLiquidity storage ll = lockedLiquidity[id];
-        require(ll.locked, "LockedLiquidity with such id has already unlocked");
+        require(ll.locked, "ERC20LiquidityPool: LockedLiquidity with id has already unlocked");
         require(to != address(0));
         require(hasRole(CONTRACT_CALLER_ROLE, _msgSender()), "ERC20LiquidityPool: must have contract caller role");
 
@@ -270,13 +270,13 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
         else
             mint = amount.mul(INITIAL_RATE);
 
-        require(mint >= minMint, "Pool: Mint limit is too large");
-        require(mint > 0, "Pool: Amount is too small");
+        require(mint >= minMint, "ERC20LiquidityPool: Mint limit is too large");
+        require(mint > 0, "ERC20LiquidityPool: Amount is too small");
 
         require(token.balanceOf(msg.sender)>=amount,
-            "Token transfer error: Please lower the amount of premiums that you want to send."
+            "ERC20LiquidityPool: Please lower the amount of premiums that you want to send."
         );        
-        require(amount<maxInvest[token],"Max invest limit reached");
+        require(amount<maxInvest[token],"ERC20LiquidityPool: Max invest limit reached");
 
         token.safeTransferFrom(msg.sender, address(this), amount);
 
@@ -297,23 +297,23 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
     function withdraw(uint256 amount, uint256 maxBurn, IERC20 token) public returns (uint256 burn) {
         require(
             lastProvideTimestamp[token][msg.sender].add(lockupPeriod[token]) <= block.timestamp,
-            "Pool: Withdrawal is locked up"
+            "ERC20LiquidityPool: Withdrawal is locked up"
         );
         require(
             amount <= availableBalance(token),
-            "Pool Error: You are trying to unlock more funds than have been locked for your contract. Please lower the amount."
+            "ERC20LiquidityPool: You are trying to unlock more funds than have been locked for your contract. Please lower the amount."
         );
 
         burn = amount.mul(totalSupply[token]).div(totalBalance(token));
 
-        require(burn <= maxBurn, "Pool: Burn limit is too small");
-        require(burn <= writerPool.balanceOf(msg.sender, writerPoolPos[token]), "Pool: Amount is too large");
-        require(burn > 0, "Pool: Amount is too small");
+        require(burn <= maxBurn, "ERC20LiquidityPool: Burn limit is too small");
+        require(burn <= writerPool.balanceOf(msg.sender, writerPoolPos[token]), "ERC20LiquidityPool: Amount is too large");
+        require(burn > 0, "ERC20LiquidityPool: Amount is too small");
 
         writerPool.burn(msg.sender, writerPoolPos[token], burn);
         totalSupply[token] = totalSupply[token].sub(burn);
         emit Withdraw(msg.sender, token, amount, burn);
-        require(token.transfer(msg.sender, amount), "Insufficient funds");
+        require(token.transfer(msg.sender, amount), "ERC20LiquidityPool: Insufficient funds");
     }
 
 
