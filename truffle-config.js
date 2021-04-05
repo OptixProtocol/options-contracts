@@ -59,9 +59,12 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    moonbaseTestnet: {
+    moonbeamTestnet: {
       provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc.testnet.moonbeam.network`),
-      network_id: 1287
+      network_id: 1287,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
     },
     maticTestnet: {
       provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc-mumbai.matic.today`),
@@ -70,6 +73,13 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
+    maticMainnet: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc-mainnet.matic.network`),
+      network_id: 137,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },    
     fantomTestnet: {
       provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc.testnet.fantom.network`),
       network_id: 0xfa2,

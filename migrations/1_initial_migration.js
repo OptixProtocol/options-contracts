@@ -51,6 +51,9 @@ const params = {
 module.exports = async function (deployer, network, [account]) {
     if (["development", "develop", 'soliditycoverage'].indexOf(network) >= 0) {
         const w = await deployer.deploy(WBTC)
+        // await WBTC.mintTo(account, "100000000000000000000")
+        // await WBTC.mintTo("0x1a4037400B5211Dc9881d088252F907B9Ed76169", "100000000000000000000");
+
         const i = await deployer.deploy(WETH)
         const o = await deployer.deploy(LINK)
         await deployer.deploy(UNI);
@@ -174,7 +177,7 @@ module.exports = async function (deployer, network, [account]) {
 
                 //set the owner of LP & opt to be opt
             }
-            case "moonbaseTestnet": {
+            case "moonbeamTestnet": {
                 const wp = await deployer.deploy(WriterPool, "url");
                 const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
                 const opt = await deployer.deploy(ERC20Options,
