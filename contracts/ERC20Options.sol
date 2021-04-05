@@ -479,7 +479,6 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
         uint256 currentPrice = uint256(_latestPrice);
         if (option.optionType == OptionType.Call) {
             require(option.strike <= currentPrice, "ERC20Options: Current price is too low");
-            profit = currentPrice.sub(option.strike).mul(option.optionSize).div(currentPrice);
             profit = currentPrice.sub(option.strike).mul(option.optionSize).div(option.strike).mul(1e9);
         } else if (option.optionType == OptionType.Put) {
             require(option.strike >= currentPrice, "ERC20Options: Current price is too high");
