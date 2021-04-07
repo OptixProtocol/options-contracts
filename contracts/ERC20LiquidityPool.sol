@@ -276,7 +276,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
         require(token.balanceOf(msg.sender)>=amount,
             "ERC20LiquidityPool: Please lower the amount of premiums that you want to send."
         );        
-        require(amount<maxInvest[token],"ERC20LiquidityPool: Max invest limit reached");
+        require(amount<=maxInvest[token],"ERC20LiquidityPool: Max invest limit reached");
 
         token.safeTransferFrom(msg.sender, address(this), amount);
 
