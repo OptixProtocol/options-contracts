@@ -119,6 +119,10 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
         collateralizationRatio[optionMarketId] = value;
     }
 
+    function setPRICE_DECIMALS(IERC20 _token, uint256 _PRICE_DECIMALS) public  {
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
+        PRICE_DECIMALS[_token] = _PRICE_DECIMALS;
+    }
 
     /*
      * @nonce calls by ERC20Options to lock funds
