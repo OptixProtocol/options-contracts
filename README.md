@@ -27,7 +27,7 @@ The testnet has markets for BNB & LINK collateralized with WBNB & LINK.
 - [LINK faucet](https://linkfaucet.protofire.io/bsctest)
 - [BNB faucet](https://testnet.binance.org/faucet-smart)
 
-#### Moomnbeam
+#### Moonbeam
 todo
 
 #### Plasm
