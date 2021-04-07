@@ -1,7 +1,10 @@
 [TOC]
 
-# Contract Addresses
+# Learn About Optyn
+https://medium.com/optyn/introducing-optyn-a-crypto-option-trading-protocol-dc4f191dbb2d
+- [Demo video](https://www.youtube.com/watch?v=cE9ebdpbGwk "Demo video")
 
+# Contract Addresses
 [Addresses.json](https://github.com/CryptoOptyn/options-frontend/blob/main/src/static/Addresses.json "Addresses.json") - has the contracts for each environment deployed to:
 - Ethereum 
 - Polygon (Matic)

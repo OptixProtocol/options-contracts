@@ -24,7 +24,7 @@ module.exports = {
       // confirmations: 1,    // # of confs to wait between deployments. (default: 0)
       timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
-      from:"0xB181DF9a58Ceb2A6fFaefB5f5db9fa6203f9aAC4",
+      from:"0x1a4037400B5211Dc9881d088252F907B9Ed76169",
     },
     ropsten: {
       provider: () =>
@@ -86,7 +86,11 @@ module.exports = {
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
-    },     
+    },
+    plasmTestnet: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc.dusty.plasmnet.io:8545`),
+      network_id: 80
+    },      
   },
   plugins: ["solidity-coverage","truffle-contract-size"],
   

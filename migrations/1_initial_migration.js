@@ -210,8 +210,16 @@ module.exports = async function (deployer, network, [account]) {
                     "GameItem",
                     "ITM")
                 break;
-                await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
-                //set the owner of LP & opt to be opt
+            }
+            case "plasmTestnet": {
+                const wp = await deployer.deploy(WriterPool, "url");
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const opt = await deployer.deploy(ERC20Options,
+                    "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
+                    ERC20LiquidityPool.address,
+                    "GameItem",
+                    "ITM")
+                break;
             }
                 
             default: {
