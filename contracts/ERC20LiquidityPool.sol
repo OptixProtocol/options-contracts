@@ -113,15 +113,15 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
      * @notice Used for changing option collateralization ratio
      * @param value New optionCollateralizationRatio value
      */
-    function setCollaterizationRatio(uint value, uint optionMarketId) external  {
+    function setCollaterizationRatio(uint optionMarketId, uint value) external  {
         require(5000 <= value, "ERC20LiquidityPool: too low");
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
         collateralizationRatio[optionMarketId] = value;
     }
 
-    function setPRICE_DECIMALS(IERC20 _token, uint256 _PRICE_DECIMALS) public  {
+    function setPRICE_DECIMALS(uint optionMarketId, uint256 _PRICE_DECIMALS) public  {
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20LiquidityPool: must have admin role");
-        PRICE_DECIMALS[_token] = _PRICE_DECIMALS;
+        PRICE_DECIMALS[optionMarketId] = _PRICE_DECIMALS;
     }
 
     /*

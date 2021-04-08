@@ -152,11 +152,11 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     {
         (, int latestPrice, , , ) = lpPools.priceProvider(optionMarketId).latestRoundData();
         uint256 currentPrice = uint256(latestPrice);
-        _fees.protocolFee = feeCalcs.getProtocolFee(optionSize, period, strike, currentPrice, optionType, optionMarketId);
-        _fees.strikeFee = feeCalcs.getStrikeFee(optionSize, period, strike, currentPrice, optionType, optionMarketId);
-        _fees.periodFee = feeCalcs.getPeriodFee(optionSize, period, strike, currentPrice, optionType, optionMarketId);
-        _fees.balanceFee = feeCalcs.getBalanceFee(optionSize, period, strike, currentPrice, optionType, optionMarketId);
-        _fees.lpFee = feeCalcs.getLiquidityProviderFee(optionSize, period, strike, currentPrice, optionType, optionMarketId);
+        _fees.protocolFee = feeCalcs.getProtocolFee(period, optionSize, strike, currentPrice, optionType, optionMarketId);
+        _fees.strikeFee = feeCalcs.getStrikeFee(period, optionSize, strike, currentPrice, optionType, optionMarketId);
+        _fees.periodFee = feeCalcs.getPeriodFee(period, optionSize, strike, currentPrice, optionType, optionMarketId);
+        _fees.balanceFee = feeCalcs.getBalanceFee(period, optionSize, strike, currentPrice, optionType, optionMarketId);
+        _fees.lpFee = feeCalcs.getLiquidityProviderFee(period, optionSize, strike, currentPrice, optionType, optionMarketId);
         _fees.total = _fees.protocolFee + _fees.strikeFee + _fees.periodFee + _fees.balanceFee + _fees.lpFee;
     }
 
@@ -199,23 +199,23 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     function getPeriodFee(
         uint256 period,
         uint256 optionSize,
-        uint256 strike,
+        uint256 strike, 
         uint256 currentPrice,
         OptionType optionType,
         uint optionMarketId
     ) override external view returns (uint256) {
-        if (optionType == OptionType.Put)
-            return optionSize
+        if (optionType == IOptions.OptionType.Put)
+            return uint256(2)
                 .mul(sqrt(period))
                 .mul(strike)
                 .div(currentPrice)
-                .div(lpPools.PRICE_DECIMALS(optionMarketId));
+                .div(uint256(4));
         else
-            return optionSize
+            return uint256(2)
                 .mul(sqrt(period))
                 .mul(currentPrice)
                 .div(strike)
-                .div(lpPools.PRICE_DECIMALS(optionMarketId));
+                .div(uint256(4));
     }
 
     function getBalanceFee(uint256 period,

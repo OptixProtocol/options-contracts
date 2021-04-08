@@ -35,12 +35,11 @@ import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
 
 
 interface IFeeCalcs {
-    function getProtocolFee(uint256 optionSize, uint256 period, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
-    function getStrikeFee(uint256 optionSize, uint256 period, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external pure returns (uint256);
-    function getPeriodFee(uint256 optionSize, uint256 period, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
-    function getBalanceFee(uint256 optionSize, uint256 period, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
-    function getLiquidityProviderFee(uint256 optionSize, uint256 period, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
-    
+    function getProtocolFee(uint256 period, uint256 optionSize, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
+    function getStrikeFee(uint256 period, uint256 optionSize, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external pure returns (uint256);
+    function getPeriodFee(uint256 period, uint256 optionSize, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
+    function getBalanceFee(uint256 period, uint256 optionSize, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
+    function getLiquidityProviderFee(uint256 period, uint256 optionSize, uint256 strike, uint256 currentPrice, IOptions.OptionType optionType, uint optionMarketId) external view returns (uint256);
     struct Fees {
         uint256 total;
         uint256 protocolFee;
