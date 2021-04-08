@@ -232,11 +232,10 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
     }
 
      function putRatio(IERC20 token, uint256 newAmount) public view returns (uint256){
-        if (lockedPremium(token)==0)
+       if (lockedPremium(token)==0)
             return 5e9;
-        uint256 newLockedPremium = lockedPremiumPut[token] + newAmount;
 
-        int256 ratio = int256((newLockedPremium.mul(1e9)).div(newLockedPremium.add(lockedPremiumCall[token])));
+        int256 ratio = int256((lockedPremiumPut[token].mul(1e9)).div(lockedPremiumPut[token].add(lockedPremiumCall[token])));
         if (ratio<0)
             return 0;
         else
@@ -244,12 +243,10 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
     }
     
     function callRatio(IERC20 token, uint256 newAmount) public view returns (uint256){
-        if (lockedPremium(token)==0)
+       if (lockedPremium(token)==0)
             return 5e9;
-        uint256 newLockedPremium = lockedPremiumCall[token] + newAmount;
 
-
-        int256 ratio = int256((newLockedPremium.mul(1e9)).div(newLockedPremium.add(lockedPremiumCall[token])));
+        int256 ratio = int256((lockedPremiumCall[token].mul(1e9)).div(lockedPremiumPut[token].add(lockedPremiumCall[token])));
         if (ratio<0)
             return 0;
         else
