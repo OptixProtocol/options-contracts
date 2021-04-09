@@ -16,7 +16,7 @@
 #### Ethereum (Rinkeby)
 The Rinkeby testnet has a single market to track the price of Matic, collateralized with LINK.
 
-- [LINK faucet](https://faucet.matic.network/ "LINK faucet")
+- [LINK faucet](https://rinkeby.chain.link/ "LINK faucet")
 
 #### Polygon (Matic Mumbai)
 The testnet has a single market to track the price of Matic, collateralized with LINK.
