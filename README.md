@@ -25,7 +25,7 @@
 - [BNB faucet](https://testnet.binance.org/faucet-smart)
 
 #### Moonbeam
-- Contracts can't be deployed due to error PollingBlockTracker - encountered an error while attempting to update latest block.
+- The contracts are deployed but not yet fully functional
 
 #### Plasm
-- Issues connecting & deploying to the network 
+- The contracts are deployed but not yet fully functional
