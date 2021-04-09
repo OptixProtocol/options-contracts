@@ -66,14 +66,14 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    maticTestnet: {
+    polygonTestnet: {
       provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc-mumbai.matic.today`),
       network_id: 80001,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    maticMainnet: {
+    polygonMainnet: {
       provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc-mainnet.matic.network`),
       network_id: 137,
       confirmations: 2,

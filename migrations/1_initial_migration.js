@@ -189,7 +189,7 @@ module.exports = async function (deployer, network, [account]) {
                 await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
                 //set the owner of LP & opt to be opt
             }
-            case "maticTestnet": {
+            case "polygonTestnet": {
                 const wp = await deployer.deploy(WriterPool, "url");
                 const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
                 const opt = await deployer.deploy(ERC20Options,

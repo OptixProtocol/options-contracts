@@ -14,24 +14,18 @@
 
 # Using the Testnets
 #### Ethereum (Rinkeby)
-The Rinkeby testnet has a single market to track the price of Matic, collateralized with LINK.
-
 - [LINK faucet](https://rinkeby.chain.link/ "LINK faucet")
 
 #### Polygon (Matic Mumbai)
-The testnet has a single market to track the price of Matic, collateralized with LINK.
-
-- [LINK faucet](https://faucet.matic.network/ "LINK faucet")
+- [LINK faucet](https://linkfaucet.protofire.io/ "LINK faucet")
 - [MATIC faucet](https://faucet.matic.network/)
 
 #### Binance Smart Chain
-The testnet has markets for BNB & LINK collateralized with WBNB & LINK.
-
 - [LINK faucet](https://linkfaucet.protofire.io/bsctest)
 - [BNB faucet](https://testnet.binance.org/faucet-smart)
 
 #### Moonbeam
-todo
+- Contracts can't be deployed due to error PollingBlockTracker - encountered an error while attempting to update latest block.
 
 #### Plasm
-todo
+- Issues connecting & deploying to the network 
