@@ -25,6 +25,9 @@ import "@openzeppelin/contracts/presets/ERC1155PresetMinterPauser.sol";
 
 
 contract WriterPool is ERC1155PresetMinterPauser  {
-    constructor(string memory uri) public ERC1155PresetMinterPauser(uri){
+
+    string public commitHash;
+    constructor(string memory uri, string memory _commitHash) public ERC1155PresetMinterPauser(uri){
+        commitHash = _commitHash;
     }
 }

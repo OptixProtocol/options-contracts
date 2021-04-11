@@ -35,6 +35,7 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
+    string public commitHash;
     uint256 public constant INITIAL_RATE = 1e18;
 
 
@@ -68,10 +69,11 @@ contract ERC20LiquidityPool is AccessControl, ILiquidityPool  {
     bytes32 public constant CONTRACT_CALLER_ROLE = keccak256("CONTRACT_CALLER_ROLE");
 
 
-    constructor(WriterPool _writerPool) public {
+    constructor(WriterPool _writerPool, string memory _commitHash) public {
         writerPool = _writerPool;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(MARKET_MAKER_ROLE, _msgSender());
+        commitHash = _commitHash;
     }
 
    function createMarket(AggregatorV3Interface _priceProvider, ERC20 _token) public  {

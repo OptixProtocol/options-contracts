@@ -1,3 +1,8 @@
+
+let commitHash = require('child_process').execSync('git rev-parse HEAD').toString();
+let poolUrl = "https://optyn.co/api/pool/{id}.​json"
+let optionUrl = "https://optyn.co/api/option/{id}.​json"
+
 const BN = web3.utils.BN
 const Exchange = artifacts.require("FakeExchange")
 
@@ -61,8 +66,8 @@ module.exports = async function (deployer, network, [account]) {
         await deployer.deploy(AAVE);
         
         // await deployer.deploy(ETHPool)
-        const wp = await deployer.deploy(WriterPool, "url");
-        const lp = await deployer.deploy(ERC20LiquidityPool, wp.address)
+        const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+        const lp = await deployer.deploy(ERC20LiquidityPool, wp.address, commitHash)
         // await deployer.deploy(BC, ALF.address, params.BC.k, params.BC.startPrice)
         await deployer.deploy(Exchange, WBTC.address, params.ETHtoBTC())
 
@@ -79,8 +84,9 @@ module.exports = async function (deployer, network, [account]) {
         const opt = await deployer.deploy(ERC20Options,
             WBTC.address,
             lp.address,
-            "GameItem",
-            "ITM"
+            "Option Contract",
+            "OPTION",
+            commitHash
         )
         await lp.grantRole(await lp.CONTRACT_CALLER_ROLE(), opt.address);
 
@@ -151,74 +157,69 @@ module.exports = async function (deployer, network, [account]) {
         switch (network) {
             case "rinkeby": {
        
-                const wp = await deployer.deploy(WriterPool, "url");
-                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address, commitHash)
                 const opt = await deployer.deploy(ERC20Options,
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
-                    "GameItem",
-                    "ITM")
-                const mr = await WriterPool.MINTER_ROLE();
-                console.log("minter:",mr);
-                // await WriterPool.grantRole(mr, ERC20LiquidityPool.address);    
+                    "Option Contract",
+                    "OPTION",
+                    commitHash)
                 break;
             }
             case "binanceTestnet": {
-                const wp = await deployer.deploy(WriterPool, "url");
-                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address, commitHash)
                 const opt = await deployer.deploy(ERC20Options,
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
-                    "GameItem",
-                    "ITM")
-                // await lp.grantRole(await lp.CONTRACT_CALLER_ROLE(), ERC20Options.address);
-                // await wp.grantRole(await wp.MINTER_ROLE(), ERC20LiquidityPool.address);
+                    "Option Contract",
+                    "OPTION",
+                    commitHash)
                 break;
-
-                //set the owner of LP & opt to be opt
             }
             case "moonbeamTestnet": {
-                const wp = await deployer.deploy(WriterPool, "url");
-                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address, commitHash)
                 const opt = await deployer.deploy(ERC20Options,
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
-                    "GameItem",
-                    "ITM")
+                    "Option Contract",
+                    "OPTION",
+                    commitHash)
                 break;
-                await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
-                //set the owner of LP & opt to be opt
             }
             case "polygonTestnet": {
-                const wp = await deployer.deploy(WriterPool, "url");
-                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address, commitHash)
                 const opt = await deployer.deploy(ERC20Options,
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
-                    "GameItem",
-                    "ITM")
+                    "Option Contract",
+                    "OPTION",
+                    commitHash)
                 break;
-                await wp.grantRole(await wp.MINTER_ROLE(), lp.address);
-                //set the owner of LP & opt to be opt
             }
             case "fantomTestnet": {
-                const wp = await deployer.deploy(WriterPool, "url");
-                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address, commitHash)
                 const opt = await deployer.deploy(ERC20Options,
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
-                    "GameItem",
-                    "ITM")
+                    "Option Contract",
+                    "OPTION",
+                    commitHash)
                 break;
             }
             case "plasmTestnet": {
-                const wp = await deployer.deploy(WriterPool, "url");
-                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address)
+                const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address, commitHash)
                 const opt = await deployer.deploy(ERC20Options,
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
-                    "GameItem",
-                    "ITM")
+                    "Option Contract",
+                    "OPTION",
+                    commitHash)
                 break;
             }
                 

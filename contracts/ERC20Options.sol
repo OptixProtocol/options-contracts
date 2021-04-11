@@ -33,6 +33,7 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
+    string public commitHash;
     address public protocolFeeRecipient;
     Option[] public override options;
     ERC20LiquidityPool public lpPools;
@@ -55,13 +56,15 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
         address _protocolFeeRecipient,
         ERC20LiquidityPool _lpPools,
         string memory name,
-        string memory symbol 
+        string memory symbol,
+        string memory _commitHash 
     ) ERC721(name, symbol) public {
         lpPools = _lpPools;
         protocolFeeRecipient = _protocolFeeRecipient;
         feeCalcs = this;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(CONTRACT_CALLER_ROLE, _msgSender());        
+        _setupRole(CONTRACT_CALLER_ROLE, _msgSender());
+        commitHash = _commitHash;        
     }
 
 
