@@ -67,7 +67,7 @@ contract ERC20Options is AccessControl, IOptions, IFeeCalcs, ERC721 {
         commitHash = _commitHash;        
     }
 
-
+ 
 
     /**
      * @notice Used for changing protocolFeeRecipient

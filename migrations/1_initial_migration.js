@@ -85,7 +85,7 @@ module.exports = async function (deployer, network, [account]) {
             WBTC.address,
             lp.address,
             "Option Contract",
-            "OPTION",
+            "OPTION",            
             commitHash
         )
         await lp.grantRole(await lp.CONTRACT_CALLER_ROLE(), opt.address);
@@ -163,7 +163,7 @@ module.exports = async function (deployer, network, [account]) {
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
                     "Option Contract",
-                    "OPTION",
+                    "OPTION",                    
                     commitHash)
                 break;
             }
@@ -174,7 +174,7 @@ module.exports = async function (deployer, network, [account]) {
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
                     "Option Contract",
-                    "OPTION",
+                    "OPTION",                    
                     commitHash)
                 break;
             }
@@ -185,7 +185,7 @@ module.exports = async function (deployer, network, [account]) {
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
                     "Option Contract",
-                    "OPTION",
+                    "OPTION",                    
                     commitHash)
                 break;
             }
@@ -196,7 +196,7 @@ module.exports = async function (deployer, network, [account]) {
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
                     "Option Contract",
-                    "OPTION",
+                    "OPTION",                    
                     commitHash)
                 break;
             }
@@ -207,7 +207,7 @@ module.exports = async function (deployer, network, [account]) {
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
                     "Option Contract",
-                    "OPTION",
+                    "OPTION",                    
                     commitHash)
                 break;
             }
@@ -218,7 +218,7 @@ module.exports = async function (deployer, network, [account]) {
                     "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
                     ERC20LiquidityPool.address,
                     "Option Contract",
-                    "OPTION",
+                    "OPTION",                    
                     commitHash)
                 break;
             }
