@@ -90,7 +90,13 @@ module.exports = {
     plasmTestnet: {
       provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rpc.dusty.plasmnet.io:8545`),
       network_id: 80
-    },      
+    },
+    avalancheTestnet: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://api.avax-test.network/ext/bc/C/rpc`),
+      network_id: 1,
+      gasPrice: 470000000000,  
+      skipDryRun: true
+    },     
   },
   plugins: ["solidity-coverage","truffle-contract-size"],
   

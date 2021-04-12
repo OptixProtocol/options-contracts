@@ -222,9 +222,19 @@ module.exports = async function (deployer, network, [account]) {
                     commitHash)
                 break;
             }
-                
+            case "avalancheTestnet": {
+                const wp = await deployer.deploy(WriterPool, poolUrl, commitHash);
+                const lp = await deployer.deploy(ERC20LiquidityPool, WriterPool.address, commitHash)
+                const opt = await deployer.deploy(ERC20Options,
+                    "0x5976120623b76fa441525A3784bBFFD5A00dBAD3",
+                    ERC20LiquidityPool.address,
+                    "Option Contract",
+                    "OPTION",                    
+                    commitHash)
+                break;
+            }                
             default: {
-                throw Error(`wrong network ${network}`)
+                throw Error(`Network not configured in migration: ${network}`)
             }        
         }
     }
