@@ -25,7 +25,7 @@
 - [BNB faucet](https://testnet.binance.org/faucet-smart)
 
 #### Moonbeam
-- The contracts are deployed but not yet fully functional
+- [MERC faucet](https://moonbase-minterc20.netlify.app/)
 
 #### Plasm
 - The contracts are deployed but not yet fully functional
